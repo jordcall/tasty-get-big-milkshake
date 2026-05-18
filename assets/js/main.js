@@ -1,3 +1,10 @@
+const WAITLIST_ENDPOINT = "https://formspree.io/f/FORM_ID";
+const PRODUCT_NAME = "TASTY GET BIG MILKSHAKE";
+const SELECTED_FLAVOR = "Chocolate";
+const SELECTED_PACK_SIZE = "12-pack";
+const PRICE_SHOWN = "$XX";
+const PAGE_VARIANT = "opener-v1";
+
 const slides = Array.from(document.querySelectorAll("[data-slide]"));
 const slideStage = document.querySelector("[data-slide-stage]");
 const counter = document.querySelector("[data-slide-counter]");
@@ -10,10 +17,30 @@ const modal = document.querySelector("[data-modal]");
 const openModalButton = document.querySelector("[data-open-modal]");
 const closeModalButtons = Array.from(document.querySelectorAll("[data-close-modal]"));
 const modalPanel = document.querySelector(".modal-panel");
+const availabilitySteps = Array.from(document.querySelectorAll("[data-availability-step]"));
+const continueAvailabilityButton = document.querySelector("[data-continue-availability]");
+const quantitySelect = document.querySelector("[data-quantity-select]");
+const waitlistForm = document.querySelector("[data-waitlist-form]");
+const emailInput = document.querySelector("[data-email-input]");
+const formMessage = document.querySelector("[data-form-message]");
+const submitWaitlistButton = document.querySelector("[data-submit-waitlist]");
+const successHeading = document.querySelector("#success-title");
+const summaryProduct = document.querySelector("[data-summary-product]");
+const summaryFlavor = document.querySelector("[data-summary-flavor]");
+const summaryPackSize = document.querySelector("[data-summary-pack-size]");
+const summaryPrice = document.querySelector("[data-summary-price]");
 
 let currentSlide = 0;
 const revealCounts = slides.map(() => 0);
 let lastFocusedElement = null;
+
+function trackEvent(name, data = {}) {
+  console.log("[event]", name, data);
+
+  if (typeof window.gtag === "function") {
+    window.gtag("event", name, data);
+  }
+}
 
 function getRevealLines(slide) {
   return Array.from(slide.querySelectorAll("[data-reveal-line]"));
@@ -55,6 +82,138 @@ function goToProduct() {
   productSection.focus({ preventScroll: true });
 }
 
+function getAvailabilityEventData() {
+  return {
+    product_name: PRODUCT_NAME,
+    selected_flavor: SELECTED_FLAVOR,
+    selected_pack_size: SELECTED_PACK_SIZE,
+    selected_quantity: quantitySelect ? quantitySelect.value : "1",
+    price_shown: PRICE_SHOWN,
+    page_variant: PAGE_VARIANT,
+  };
+}
+
+function getUtmParams() {
+  const params = new URLSearchParams(window.location.search);
+
+  return {
+    utm_source: params.get("utm_source") || "",
+    utm_medium: params.get("utm_medium") || "",
+    utm_campaign: params.get("utm_campaign") || "",
+    utm_content: params.get("utm_content") || "",
+    utm_term: params.get("utm_term") || "",
+  };
+}
+
+function setHiddenValue(selector, value) {
+  const field = waitlistForm ? waitlistForm.querySelector(selector) : null;
+
+  if (field) {
+    field.value = value;
+  }
+}
+
+function updateProductSummary() {
+  if (summaryProduct) {
+    summaryProduct.textContent = PRODUCT_NAME;
+  }
+
+  if (summaryFlavor) {
+    summaryFlavor.textContent = SELECTED_FLAVOR;
+  }
+
+  if (summaryPackSize) {
+    summaryPackSize.textContent = SELECTED_PACK_SIZE;
+  }
+
+  if (summaryPrice) {
+    summaryPrice.textContent = PRICE_SHOWN;
+  }
+}
+
+function updateWaitlistHiddenFields() {
+  const utmParams = getUtmParams();
+
+  setHiddenValue("[data-hidden-product-name]", PRODUCT_NAME);
+  setHiddenValue("[data-hidden-selected-flavor]", SELECTED_FLAVOR);
+  setHiddenValue("[data-hidden-selected-pack-size]", SELECTED_PACK_SIZE);
+  setHiddenValue("[data-hidden-selected-quantity]", quantitySelect ? quantitySelect.value : "1");
+  setHiddenValue("[data-hidden-price-shown]", PRICE_SHOWN);
+  setHiddenValue("[data-hidden-page-variant]", PAGE_VARIANT);
+  setHiddenValue("[data-hidden-utm-source]", utmParams.utm_source);
+  setHiddenValue("[data-hidden-utm-medium]", utmParams.utm_medium);
+  setHiddenValue("[data-hidden-utm-campaign]", utmParams.utm_campaign);
+  setHiddenValue("[data-hidden-utm-content]", utmParams.utm_content);
+  setHiddenValue("[data-hidden-utm-term]", utmParams.utm_term);
+  setHiddenValue("[data-hidden-submitted-at]", new Date().toISOString());
+}
+
+function setFormMessage(message, type = "") {
+  if (!formMessage) {
+    return;
+  }
+
+  formMessage.textContent = message;
+  formMessage.classList.toggle("is-error", type === "error");
+  formMessage.classList.toggle("is-success", type === "success");
+}
+
+function showAvailabilityStep(stepName) {
+  availabilitySteps.forEach((step) => {
+    step.hidden = step.dataset.availabilityStep !== stepName;
+  });
+
+  if (stepName === "confirm") {
+    modalPanel.setAttribute("aria-labelledby", "availability-modal-title");
+    modalPanel.setAttribute("aria-describedby", "availability-modal-description");
+  }
+
+  if (stepName === "waitlist") {
+    modalPanel.setAttribute("aria-labelledby", "waitlist-title");
+    modalPanel.setAttribute("aria-describedby", "waitlist-description");
+    updateWaitlistHiddenFields();
+    trackEvent("out_of_stock_viewed", getAvailabilityEventData());
+
+    window.setTimeout(() => {
+      if (emailInput) {
+        emailInput.focus();
+      }
+    }, 0);
+  }
+
+  if (stepName === "success") {
+    modalPanel.setAttribute("aria-labelledby", "success-title");
+    modalPanel.setAttribute("aria-describedby", "success-description");
+
+    window.setTimeout(() => {
+      if (successHeading) {
+        successHeading.focus();
+      }
+    }, 0);
+  }
+}
+
+function resetAvailabilityFlow() {
+  updateProductSummary();
+
+  if (quantitySelect) {
+    quantitySelect.value = "1";
+  }
+
+  if (waitlistForm) {
+    waitlistForm.reset();
+  }
+
+  if (submitWaitlistButton) {
+    submitWaitlistButton.disabled = false;
+    submitWaitlistButton.textContent = "Notify me";
+  }
+
+  setFormMessage("");
+  updateWaitlistHiddenFields();
+  showAvailabilityStep("confirm");
+}
+
 function advanceSlide() {
   const revealLines = getRevealLines(slides[currentSlide]);
 
@@ -90,19 +249,91 @@ function retreatSlide() {
 
 function openModal() {
   lastFocusedElement = document.activeElement;
+  resetAvailabilityFlow();
   modal.hidden = false;
   document.body.classList.add("modal-open");
+  trackEvent("availability_opened", getAvailabilityEventData());
 
   const closeButton = modal.querySelector("[data-close-modal]");
   closeButton.focus();
 }
 
 function closeModal() {
+  if (modal.hidden) {
+    return;
+  }
+
   modal.hidden = true;
   document.body.classList.remove("modal-open");
+  trackEvent("availability_closed", getAvailabilityEventData());
 
   if (lastFocusedElement) {
     lastFocusedElement.focus();
+  }
+}
+
+function handleQuantityChange() {
+  updateWaitlistHiddenFields();
+  trackEvent("quantity_changed", getAvailabilityEventData());
+}
+
+function continueToOutOfStock() {
+  updateWaitlistHiddenFields();
+  trackEvent("continue_to_out_of_stock", getAvailabilityEventData());
+  showAvailabilityStep("waitlist");
+}
+
+async function submitWaitlistForm(event) {
+  event.preventDefault();
+
+  if (!waitlistForm.reportValidity()) {
+    return;
+  }
+
+  updateWaitlistHiddenFields();
+  setFormMessage("");
+
+  if (WAITLIST_ENDPOINT.includes("FORM_ID")) {
+    const message = "Waitlist form is not configured yet. Replace FORM_ID with the real Formspree form ID.";
+    setFormMessage(message, "error");
+    trackEvent("waitlist_submit_failed", {
+      ...getAvailabilityEventData(),
+      reason: "placeholder_endpoint",
+    });
+    return;
+  }
+
+  if (submitWaitlistButton) {
+    submitWaitlistButton.disabled = true;
+    submitWaitlistButton.textContent = "Submitting...";
+  }
+
+  try {
+    const response = await fetch(WAITLIST_ENDPOINT, {
+      method: "POST",
+      body: new FormData(waitlistForm),
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Form submission failed with status ${response.status}`);
+    }
+
+    trackEvent("waitlist_submitted", getAvailabilityEventData());
+    showAvailabilityStep("success");
+  } catch (error) {
+    setFormMessage("Something went wrong. Please try again in a moment.", "error");
+    trackEvent("waitlist_submit_failed", {
+      ...getAvailabilityEventData(),
+      reason: error.message,
+    });
+
+    if (submitWaitlistButton) {
+      submitWaitlistButton.disabled = false;
+      submitWaitlistButton.textContent = "Notify me";
+    }
   }
 }
 
@@ -135,6 +366,9 @@ slideStage.addEventListener("click", advanceSlide);
 backButton.addEventListener("click", retreatSlide);
 skipButton.addEventListener("click", goToProduct);
 openModalButton.addEventListener("click", openModal);
+continueAvailabilityButton.addEventListener("click", continueToOutOfStock);
+quantitySelect.addEventListener("change", handleQuantityChange);
+waitlistForm.addEventListener("submit", submitWaitlistForm);
 
 closeModalButtons.forEach((button) => {
   button.addEventListener("click", closeModal);

@@ -38,13 +38,29 @@ python tools/export_codebase_snapshot.py
 
 Then upload or paste `codebase-snapshot.md` into ChatGPT.
 
+## Availability flow
+
+The flow is: Check availability -> product confirmation -> Out of stock -> waitlist form.
+
+The Formspree endpoint placeholder is in `assets/js/main.js` as `WAITLIST_ENDPOINT`. Replace `FORM_ID` with the real Formspree form ID before sharing the site publicly.
+
+No payment, address, phone, or health information is collected.
+
 ## Checklist
 
 - slideshow advances on click/tap
 - arrow keys work
 - skip button works
 - product section appears
-- availability modal opens and closes
+- Check availability opens modal
+- quantity selector works
+- Continue shows Out of stock step
+- email field is required
+- placeholder Formspree endpoint shows configuration warning
+- real endpoint submission would show success after successful POST
+- Escape closes modal
+- backdrop closes modal
+- focus returns to Check availability button
 - mobile layout works
 
 ## Next Steps

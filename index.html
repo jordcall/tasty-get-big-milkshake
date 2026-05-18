@@ -145,14 +145,124 @@
         class="modal-panel"
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        aria-labelledby="availability-modal-title"
+        aria-describedby="availability-modal-description"
       >
         <button class="modal-close" type="button" data-close-modal aria-label="Close modal">
           X
         </button>
-        <h2 id="modal-title">Prototype only</h2>
-        <p id="modal-description">Prototype only. The availability flow comes next.</p>
+        <div
+          class="availability-step"
+          data-availability-step="confirm"
+          id="availability-modal-description"
+        >
+          <h2 id="availability-modal-title">Check availability</h2>
+          <div class="product-summary" data-product-summary>
+            <p class="summary-product" data-summary-product>TASTY GET BIG MILKSHAKE</p>
+            <dl>
+              <div class="summary-row">
+                <dt>Flavor</dt>
+                <dd data-summary-flavor>Chocolate</dd>
+              </div>
+              <div class="summary-row">
+                <dt>Pack size</dt>
+                <dd data-summary-pack-size>12-pack</dd>
+              </div>
+              <div class="summary-row">
+                <dt>Price</dt>
+                <dd data-summary-price>$XX</dd>
+              </div>
+            </dl>
+            <div class="quantity-row">
+              <label for="availability-quantity">Quantity</label>
+              <select
+                class="quantity-select"
+                id="availability-quantity"
+                name="quantity"
+                data-quantity-select
+              >
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="availability-button" type="button" data-continue-availability>
+              Continue
+            </button>
+          </div>
+          <p class="secondary-note">No payment will be taken.</p>
+        </div>
+
+        <div class="availability-step" data-availability-step="waitlist" hidden>
+          <h2 id="waitlist-title">Out of stock</h2>
+          <p id="waitlist-description">TASTY GET BIG MILKSHAKE is currently out of stock.</p>
+          <p class="payment-note">No payment has been taken.</p>
+          <p>Want us to let you know when it&rsquo;s available?</p>
+
+          <form
+            class="waitlist-form"
+            action="https://formspree.io/f/FORM_ID"
+            method="POST"
+            data-waitlist-form
+          >
+            <div class="form-field">
+              <label for="waitlist-email">Email address<span aria-hidden="true">*</span></label>
+              <input
+                id="waitlist-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                data-email-input
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="waitlist-first-name">First name</label>
+              <input
+                id="waitlist-first-name"
+                name="first_name"
+                type="text"
+                autocomplete="given-name"
+              >
+            </div>
+
+            <input type="hidden" name="product_name" data-hidden-product-name>
+            <input type="hidden" name="selected_flavor" data-hidden-selected-flavor>
+            <input type="hidden" name="selected_pack_size" data-hidden-selected-pack-size>
+            <input type="hidden" name="selected_quantity" data-hidden-selected-quantity>
+            <input type="hidden" name="price_shown" data-hidden-price-shown>
+            <input type="hidden" name="page_variant" data-hidden-page-variant>
+            <input type="hidden" name="utm_source" data-hidden-utm-source>
+            <input type="hidden" name="utm_medium" data-hidden-utm-medium>
+            <input type="hidden" name="utm_campaign" data-hidden-utm-campaign>
+            <input type="hidden" name="utm_content" data-hidden-utm-content>
+            <input type="hidden" name="utm_term" data-hidden-utm-term>
+            <input type="hidden" name="submitted_at" data-hidden-submitted-at>
+
+            <p class="form-message" data-form-message role="status" aria-live="polite"></p>
+
+            <div class="modal-actions">
+              <button class="submit-button" type="submit" data-submit-waitlist>
+                Notify me
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="availability-step" data-availability-step="success" hidden>
+          <h2 id="success-title" tabindex="-1">You&rsquo;re on the list.</h2>
+          <p class="form-message is-success" id="success-description">
+            No payment was taken. We&rsquo;ll only email you about this product launch.
+          </p>
+          <div class="modal-actions">
+            <button class="availability-button" type="button" data-close-modal data-success-close>
+              Close
+            </button>
+          </div>
+        </div>
       </section>
     </div>
 
