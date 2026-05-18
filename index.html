@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tasty Get Big Milkshake</title>
+    <meta
+      name="description"
+      content="A bold static prototype for a high-protein, high-calorie milkshake landing page."
+    >
+    <link rel="stylesheet" href="assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header" aria-label="Site controls">
+      <a class="brand-mark" href="#slides" aria-label="Tasty Get Big Milkshake home">
+        TGBM
+      </a>
+      <button class="skip-button" type="button" data-skip-to-product>
+        Skip to product
+      </button>
+    </header>
+
+    <main>
+      <section
+        class="slideshow"
+        id="slides"
+        aria-roledescription="slideshow"
+        aria-label="Tasty Get Big Milkshake opening story"
+      >
+        <div class="slide-progress" aria-hidden="true">
+          <span class="slide-counter" data-slide-counter>1 / 6</span>
+          <span class="progress-track">
+            <span class="progress-fill" data-progress-fill></span>
+          </span>
+        </div>
+
+        <button class="slide-back" type="button" data-slide-back>
+          Back
+        </button>
+
+        <div class="slide-stage" data-slide-stage tabindex="0">
+          <article class="slide is-active" data-slide>
+            <p class="line line-punch">
+              You need lots of protein to build <strong class="emphasis">big muscles.</strong>
+            </p>
+          </article>
+
+          <article class="slide slide-stack" data-slide>
+            <p class="line line-setup">Protein shakes have lots of protein...</p>
+            <p class="line line-punch reveal-line" data-reveal-line>
+              But protein shakes are <strong class="emphasis gross">gross.</strong>
+            </p>
+            <p class="line line-aside reveal-line" data-reveal-line>
+              (If you disagree, this probably isn&rsquo;t for you.)
+            </p>
+          </article>
+
+          <article class="slide slide-stack" data-slide>
+            <p class="line line-setup">
+              Protein products leave out the tasty stuff to save calories.
+            </p>
+            <p class="line line-support reveal-line" data-reveal-line>
+              Great for people trying to lose weight...
+            </p>
+            <p class="line line-punch reveal-line" data-reveal-line>
+              ...bad for low-appetite, high-metabolism
+              <strong class="emphasis hard-gainers">Hard Gainers.</strong>
+            </p>
+          </article>
+
+          <article class="slide slide-stack list-slide" data-slide>
+            <p class="line line-setup">
+              Hard gainers need <strong class="emphasis">three things:</strong>
+            </p>
+
+            <div class="need-list">
+              <p class="reveal-line" data-reveal-line>
+                <span>1.</span> Lots of protein.
+              </p>
+              <p class="reveal-line" data-reveal-line>
+                <span>2.</span> Lots of calories.
+              </p>
+              <p class="reveal-line" data-reveal-line>
+                <span>3.</span> Something that doesn&rsquo;t make you want to gag.
+              </p>
+            </div>
+
+            <p class="line line-support line-conclusion reveal-line" data-reveal-line>
+              If you leave the <strong class="emphasis">yummy calories</strong> in, you can do all three.
+            </p>
+          </article>
+
+          <article class="slide slide-stack" data-slide>
+            <p class="line line-punch">Why isn&rsquo;t anyone doing this?</p>
+            <p class="line line-punch reveal-line" data-reveal-line>
+              <strong class="emphasis">Well, now we are.</strong>
+            </p>
+            <p class="line line-support reveal-line" data-reveal-line>
+              We made a high-protein milkshake that leaves the tasty calories in.
+            </p>
+          </article>
+
+          <article class="slide final-slide slide-stack" data-slide>
+            <p class="line line-support">
+              If you don&rsquo;t want to put on weight, try something else.
+            </p>
+            <p class="line line-punch reveal-line" data-reveal-line>
+              But if you want to <strong class="emphasis get-big">GET BIG</strong>, try the&hellip;
+            </p>
+            <h1 class="line product-title reveal-line" data-reveal-line>
+              <span>TASTY GET BIG MILKSHAKE</span>
+            </h1>
+          </article>
+        </div>
+
+        <p class="continue-hint" data-continue-hint>Click/tap to continue</p>
+      </section>
+
+      <section class="product-hero" id="product" tabindex="-1" aria-labelledby="product-title">
+        <div class="product-copy">
+          <p class="eyebrow">For hard gainers who are tired of sad shakes</p>
+          <h2 id="product-title">TASTY GET BIG MILKSHAKE</h2>
+          <p class="product-subheadline">High protein. High calorie. Tastes good.</p>
+          <p class="product-body">
+            This is a milkshake for hard gainers who want protein, calories, and palatability. Drink it with breakfast to start the day ahead of the macros game instead of way behind.
+          </p>
+          <button class="availability-button" type="button" data-open-modal>
+            Check availability
+          </button>
+        </div>
+
+        <div class="product-visual" aria-hidden="true">
+          <div class="shake-cup">
+            <span class="straw"></span>
+            <span class="cup-label">GET<br>BIG</span>
+          </div>
+          <div class="calorie-burst">Tasty calories included</div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" data-modal hidden>
+      <div class="modal-backdrop" data-close-modal></div>
+      <section
+        class="modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <button class="modal-close" type="button" data-close-modal aria-label="Close modal">
+          X
+        </button>
+        <h2 id="modal-title">Prototype only</h2>
+        <p id="modal-description">Prototype only. The availability flow comes next.</p>
+      </section>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
