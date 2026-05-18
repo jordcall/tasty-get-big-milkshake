@@ -335,6 +335,10 @@ button:focus-visible,
   text-shadow: 0.045em 0.045em 0 var(--accent);
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
 .continue-hint {
   justify-self: end;
   margin: 0;
