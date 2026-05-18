@@ -30,6 +30,14 @@ http://localhost:8000
 
 You can also open `index.html` directly in a browser.
 
+## Export codebase snapshot
+
+```bash
+python tools/export_codebase_snapshot.py
+```
+
+Then upload or paste `codebase-snapshot.md` into ChatGPT.
+
 ## Checklist
 
 - slideshow advances on click/tap
